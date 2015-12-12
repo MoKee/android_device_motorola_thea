@@ -1,5 +1,9 @@
 [
   {
+    "repository": "android_vendor_motorola_thea",
+    "target_path": "vendor/motorola/thea"
+  },
+  {
     "repository": "android_device_motorola_msm8226-common",
     "target_path": "device/motorola/msm8226-common"
   }
