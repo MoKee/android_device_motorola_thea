@@ -29,6 +29,8 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#define _REALLY_INCLUDE_SYS__SYSTEM_PROPERTIES_H_
+#include <sys/_system_properties.h>
 
 #include "vendor_init.h"
 #include "property_service.h"
@@ -37,6 +39,17 @@
 
 void gsm_properties(bool msim);
 void cdma_properties(const char *cdma_sub, const char *network);
+
+void property_override(char const prop[], char const value[])
+{
+    prop_info *pi;
+
+    pi = (prop_info*) __system_property_find(prop);
+    if (pi)
+        __system_property_update(pi, value, strlen(value));
+    else
+        __system_property_add(prop, strlen(prop), value, strlen(value));
+}
 
 void vendor_load_properties()
 {
@@ -48,40 +61,40 @@ void vendor_load_properties()
 
     std::string radio = property_get("ro.boot.radio");
 
-    property_set("ro.product.model", "Moto G 2014 LTE");
+    property_override("ro.product.model", "Moto G 2014 LTE");
 
     if (radio == "0x3") {
         /* XT1072 */
         gsm_properties(false);
-        property_set("ro.build.description", "thea_retgb-user 6.0 MPB24.65-34 31 release-keys");
-        property_set("ro.build.fingerprint", "motorola/thea_retgb/thea:6.0/MPB24.65-34/31:user/release-keys");
-        property_set("ro.build.product", "thea");
+        property_override("ro.build.description", "thea_retgb-user 6.0 MPB24.65-34 31 release-keys");
+        property_override("ro.build.fingerprint", "motorola/thea_retgb/thea:6.0/MPB24.65-34/31:user/release-keys");
+        property_override("ro.build.product", "thea");
         property_set("ro.mot.build.customerid", "retgball");
-        property_set("ro.product.device", "thea");
+        property_override("ro.product.device", "thea");
    } else if (radio == "0xE") {
         /* XT1077 */
         cdma_properties("0", "10");
-        property_set("ro.build.description", "thea_retcn_ds-user 6.0 MPB24.65-34 31 release-keys");
-        property_set("ro.build.fingerprint", "motorola/thea_retcn_ds/thea_ds:6.0/MPB24.65-34/31:user/release-keys");
-        property_set("ro.build.product", "thea_ds");
+        property_override("ro.build.description", "thea_retcn_ds-user 6.0 MPB24.65-34 31 release-keys");
+        property_override("ro.build.fingerprint", "motorola/thea_retcn_ds/thea_ds:6.0/MPB24.65-34/31:user/release-keys");
+        property_override("ro.build.product", "thea_ds");
         property_set("ro.mot.build.customerid", "retcn");
-        property_set("ro.product.device", "thea_ds");
+        property_override("ro.product.device", "thea_ds");
    } else if (radio == "0xC") {
         /* XT1078 */
         gsm_properties(true);
-        property_set("ro.build.description", "thea_retbr_ds-user 6.0 MPB24.65-34 31 release-keys");
-        property_set("ro.build.fingerprint", "motorola/thea_retbr_ds/thea_umtsds:6.0/MPB24.65-34/31:user/release-keys");
-        property_set("ro.build.product", "thea_umtsds");
+        property_override("ro.build.description", "thea_retbr_ds-user 6.0 MPB24.65-34 31 release-keys");
+        property_override("ro.build.fingerprint", "motorola/thea_retbr_ds/thea_umtsds:6.0/MPB24.65-34/31:user/release-keys");
+        property_override("ro.build.product", "thea_umtsds");
         property_set("ro.mot.build.customerid", "retbr");
-        property_set("ro.product.device", "thea_umtsds");
+        property_override("ro.product.device", "thea_umtsds");
     } else if (radio == "0xD") {
         /* XT1079 */
         cdma_properties("0", "20");
-        property_set("ro.build.description", "thea_retcn_ds-user 6.0 MPB24.65-34 31 release-keys");
-        property_set("ro.build.fingerprint", "motorola/thea_retcn_ds/thea_ds:6.0/MPB24.65-34/31:user/release-keys");
-        property_set("ro.build.product", "thea_ds");
+        property_override("ro.build.description", "thea_retcn_ds-user 6.0 MPB24.65-34 31 release-keys");
+        property_override("ro.build.fingerprint", "motorola/thea_retcn_ds/thea_ds:6.0/MPB24.65-34/31:user/release-keys");
+        property_override("ro.build.product", "thea_ds");
         property_set("ro.mot.build.customerid", "retcn");
-        property_set("ro.product.device", "thea_ds");
+        property_override("ro.product.device", "thea_ds");
     }
 
     std::string device = property_get("ro.product.device");
